@@ -1,0 +1,8 @@
+﻿Bugs functionality: 
+	- React to hit by having health reduced
+	- Die (disappear) 
+	- Try to attack the player and/or the central monster
+	- Damage  the player 
+
+Monster functionality:
+	- React to being hit by either 
