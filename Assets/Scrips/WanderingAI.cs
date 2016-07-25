@@ -32,10 +32,10 @@ public class WanderingAI : MonoBehaviour {
 		if (_alive) {
 			// If we haven't hit the monster, go towards it.
 			if (Time.time  < nextChaseMonster) {
-				Debug.Log ("Running away from monster");
+				// Debug.Log ("Running away from monster");
 				RunFromMonster ();
 			} else {
-				Debug.Log ("Re-enabling the nav mesh");
+				// Debug.Log ("Re-enabling the nav mesh");
 				nav.enabled = true;
 				nav.SetDestination (monsterPosition);
 			}
@@ -47,8 +47,11 @@ public class WanderingAI : MonoBehaviour {
 		Hittable hitObject = other.GetComponent<Hittable>();
 		if (hitObject != null) {
 			hitObject.ReactToHit (damage);
+		} else {
+			Debug.Log ("Hit a wall");
 		}
 
+		/**
 		nav.enabled = false;
 		nextChaseMonster = Time.time + runAwayTime;
 		runDirection = transform.position - monsterPosition;
@@ -56,10 +59,11 @@ public class WanderingAI : MonoBehaviour {
 		Vector3.Normalize (runDirection);
 		// Run away from monster
 		RunFromMonster();
+		*/
 	}
 
 	void RunFromMonster() {
-		Debug.Log ("Running away...");
+		// Debug.Log ("Running away...");
 		transform.Translate (speed*runDirection * Time.deltaTime);
 	}
 
