@@ -7,10 +7,14 @@ public class MonsterBehaviour : MonoBehaviour, Hittable {
 	private bool _asleep;
 	public Material awakeMaterial;
 	public Slider awakeSlider;
+	public int startingSleepiness = 30;
 
 	// Use this for initialization
 	void Start () {
-		_sleepiness = 10;
+		_sleepiness = startingSleepiness;
+		awakeSlider.maxValue = startingSleepiness;
+		awakeSlider.value = 0;
+
 		_asleep = true;
 	}
 	
@@ -34,7 +38,8 @@ public class MonsterBehaviour : MonoBehaviour, Hittable {
 			_sleepiness -= damage;
 			// Remember, have to use StartCoroutine; can't just call the co-routine.
 			StartCoroutine (Startle ());
-			awakeSlider.value = _sleepiness;
+			// Bar goes from empty (fully asleep) to full (awake)
+			awakeSlider.value = startingSleepiness - _sleepiness;
 
 			if (_sleepiness < 0) {
 				WakeUp ();

@@ -15,6 +15,7 @@ public class WanderingAI : MonoBehaviour, Hittable {
 	private float nextChaseMonster;
 	private Vector3 runDirection;
 	public MonsterBehaviour monsterBehaviour;
+	public int scoreValue = 10;
 
 	public GameObject monster;
 
@@ -82,17 +83,22 @@ public class WanderingAI : MonoBehaviour, Hittable {
 	}
 	
 	public void ReactToHit(int damage) {
-		health -= damage;
-		if(health <= 0) {
-			_alive = false;
-			StartCoroutine (Die ());
+		if (_alive) {
+			health -= damage;
+			if (health <= 0) {
+				_alive = false;
+				StartCoroutine (Die ());
+			}
 		}
 	}
 
 	// IEnumerator ~~ iterator?
 	private IEnumerator Die() {
+		nav.enabled = false;
 		this.transform.Rotate (-75, 0, 0);
-		yield return new WaitForSeconds (1.5f);
+		Debug.Log ("Bug caught!");
+		yield return new WaitForSeconds (1f);
+		ScoreManager.score += scoreValue;
 
 		Destroy (this.gameObject);
 	}
