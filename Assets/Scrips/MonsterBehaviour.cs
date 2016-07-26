@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class MonsterBehaviour : MonoBehaviour, Hittable {
 	private int _sleepiness; 
 	private bool _asleep;
 	public Material awakeMaterial;
+	public Slider awakeSlider;
 
 	// Use this for initialization
 	void Start () {
@@ -21,6 +23,10 @@ public class MonsterBehaviour : MonoBehaviour, Hittable {
 		_asleep = asleep;
 	}
 
+	public bool IsAsleep() {
+		return _asleep;
+	}
+
 	// From Hittable interface
 	public void ReactToHit(int damage) {
 		if (_asleep) {
@@ -28,6 +34,7 @@ public class MonsterBehaviour : MonoBehaviour, Hittable {
 			_sleepiness -= damage;
 			// Remember, have to use StartCoroutine; can't just call the co-routine.
 			StartCoroutine (Startle ());
+			awakeSlider.value = _sleepiness;
 
 			if (_sleepiness < 0) {
 				WakeUp ();

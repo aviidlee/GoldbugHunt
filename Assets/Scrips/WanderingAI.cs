@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class WanderingAI : MonoBehaviour {
+public class WanderingAI : MonoBehaviour, Hittable {
 	public float speed = 3.0f;
 	public float obstacleRange = 5.0f;
 	private bool _alive;
@@ -14,13 +14,30 @@ public class WanderingAI : MonoBehaviour {
 	private float runAwayTime = 2.0f;
 	private float nextChaseMonster;
 	private Vector3 runDirection;
+	public MonsterBehaviour monsterBehaviour;
+
+	public GameObject monster;
+
+	public int health; 
+	public int startingHealth = 5;
+
+	private bool _monsterInRange = false;
+	// Time in seconds between each attack
+	public float timeBetweenAttacks = 0.5f;
+	float timer;
 
 	// Use this for initialization
 	void Start () {
 		_alive = true;
+		health = startingHealth;
+
 		nav = GetComponent<NavMeshAgent> ();
-		nav.SetDestination(monsterPosition);
-		monsterPosition = GameObject.FindWithTag ("Monster").transform.position;
+		monster = GameObject.FindWithTag ("Monster");
+		monsterPosition = monster.transform.position;
+		monsterBehaviour = monster.GetComponent<MonsterBehaviour> ();
+
+		nav.enabled = true;
+		nav.SetDestination (monsterPosition);
 	}
 
 	public void SetAlive(bool alive) {
@@ -29,42 +46,55 @@ public class WanderingAI : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		if (_alive) {
-			// If we haven't hit the monster, go towards it.
-			if (Time.time  < nextChaseMonster) {
-				// Debug.Log ("Running away from monster");
-				RunFromMonster ();
-			} else {
-				// Debug.Log ("Re-enabling the nav mesh");
-				nav.enabled = true;
-				nav.SetDestination (monsterPosition);
-			}
+		timer += Time.deltaTime;
+
+		if (timer >= timeBetweenAttacks && _monsterInRange && _alive) {
+			Attack ();
 		}
 	}
 
 	void OnTriggerEnter(Collider other) {
-		Debug.Log ("Bug collided into something");
 		Hittable hitObject = other.GetComponent<Hittable>();
 		if (hitObject != null) {
+			_monsterInRange = true;
 			hitObject.ReactToHit (damage);
 		} else {
 			Debug.Log ("Hit a wall");
 		}
+	}
 
-		/**
-		nav.enabled = false;
-		nextChaseMonster = Time.time + runAwayTime;
-		runDirection = transform.position - monsterPosition;
-		runDirection.y = 0; // Don't fly
-		Vector3.Normalize (runDirection);
-		// Run away from monster
-		RunFromMonster();
-		*/
+	void OnTriggerExit(Collider other) {
+		if (other.gameObject == monster) {
+			_monsterInRange = false;
+		}
+	}
+
+	void Attack() {
+		timer = 0f;
+		if (monsterBehaviour.IsAsleep ()) {
+			monsterBehaviour.ReactToHit (damage);
+		}
 	}
 
 	void RunFromMonster() {
 		// Debug.Log ("Running away...");
 		transform.Translate (speed*runDirection * Time.deltaTime);
+	}
+	
+	public void ReactToHit(int damage) {
+		health -= damage;
+		if(health <= 0) {
+			_alive = false;
+			StartCoroutine (Die ());
+		}
+	}
+
+	// IEnumerator ~~ iterator?
+	private IEnumerator Die() {
+		this.transform.Rotate (-75, 0, 0);
+		yield return new WaitForSeconds (1.5f);
+
+		Destroy (this.gameObject);
 	}
 
 	// For attacking the player with ray casting. Probably won't use. 
