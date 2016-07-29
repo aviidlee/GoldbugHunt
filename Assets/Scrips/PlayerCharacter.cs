@@ -9,7 +9,10 @@ public class PlayerCharacter : MonoBehaviour, Hittable {
 	// Use this for initialization
 	void Start () {
 		_health = 5;
-	
+	}
+
+	public int GetHealth() {
+		return _health;
 	}
 
 	void OnTriggerEnter(Collider other) {
