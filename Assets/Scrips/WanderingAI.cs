@@ -17,6 +17,8 @@ public class WanderingAI : MonoBehaviour, Hittable {
 	public MonsterBehaviour monsterBehaviour;
 	public int scoreValue = 10;
 
+	public ScoreManager scoreManager;
+
 	public GameObject monster;
 
 	public int health; 
@@ -36,6 +38,8 @@ public class WanderingAI : MonoBehaviour, Hittable {
 		monster = GameObject.FindWithTag ("Monster");
 		monsterPosition = monster.transform.position;
 		monsterBehaviour = monster.GetComponent<MonsterBehaviour> ();
+
+		scoreManager = GameObject.FindWithTag ("ScoreManager").GetComponent<ScoreManager>();
 
 		nav.enabled = true;
 		nav.SetDestination (monsterPosition);
@@ -98,7 +102,7 @@ public class WanderingAI : MonoBehaviour, Hittable {
 		this.transform.Rotate (-75, 0, 0);
 		Debug.Log ("Bug caught!");
 		yield return new WaitForSeconds (1f);
-		ScoreManager.score += scoreValue;
+		scoreManager.AddScore (scoreValue);
 
 		Destroy (this.gameObject);
 	}
