@@ -2,10 +2,8 @@
 
 # Features to implement
 - Fix horrific coupling etc.
-- Change spawn characteristics:
-    - Rather than having everything spawn at once from every location, 
-      randomly choose spawn location from a number of possible locations. 
 - Change spawning locations so that they don't spawn in walls etc.
+- Add play again option after game over.
 
 Maybe would be OK if goldbugs didn't attack player.
 	- Damage player health when goldbug runs into player
@@ -19,3 +17,6 @@ Maybe would be OK if goldbugs didn't attack player.
 - Make the goldbugs spawn in more interesting ways
 	- Enable addition of additional spawn points in the future (for higher levels,
 	  for instance). 
+- Change spawn characteristics:
+    - Rather than having everything spawn at once from every location, 
+      randomly choose spawn location from a number of possible locations. 

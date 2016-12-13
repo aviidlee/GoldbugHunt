@@ -4,14 +4,15 @@ using System.Collections;
 public class RayShooter : MonoBehaviour {
 	private Camera _camera; 
 	public int damage = 5;
+    public SoundManager sound;
 
 	// Use this for initialization
 	void Start () {
 		_camera = GetComponent<Camera> ();
 
 		// Hide cursor 
-		// Cursor.lockState = CursorLockMode.Locked;
-		// Cursor.visible = false;
+		Cursor.lockState = CursorLockMode.Locked;
+		Cursor.visible = false;
 	}
 
 
@@ -26,6 +27,7 @@ public class RayShooter : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (Input.GetMouseButtonDown (0)) {
+            sound.Shoot();
 			// Get middle of screen
 			Vector3 point = new Vector3 (_camera.pixelWidth / 2, _camera.pixelHeight / 2, 0);
 			Ray ray = _camera.ScreenPointToRay (point);
@@ -39,7 +41,7 @@ public class RayShooter : MonoBehaviour {
 					Debug.Log ("inlficting damage!!!");
 					target.ReactToHit (damage);
 				} else {
-					StartCoroutine (SphereIndicator (hit.point));
+					// StartCoroutine (SphereIndicator (hit.point));
 				}
 			}
 		}

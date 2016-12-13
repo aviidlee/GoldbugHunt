@@ -7,16 +7,20 @@ using System.Collections.Generic;
 public class EnemyManager : MonoBehaviour {
 
 	public MonsterBehaviour monster;
-
 	public GameObject enemy;
-	public float spawnTime = 6.0f;
+	public float spawnTime = 3.0f;
 	private List<Vector3> spawnPoints;
 	public LevelManager levelManager;
+
+    // Add a new spawn point whenever spawn time is less than this number
+    public float newPointFreq = 1.0f;
+    
+    // Number of enemies to spawn per call to spawn.
+    private int numToSpawn = 1;
 
 	// Use this for initialization
 	void Start () {
 		spawnPoints = new List<Vector3> ();
-		AddNewSpawnPoint ();
 		BeginSpawning ();
 	}
 
@@ -28,27 +32,37 @@ public class EnemyManager : MonoBehaviour {
 		InvokeRepeating ("Spawn", 0, spawnTime);
 	}
 
+    /*
+     * Spawn numToSpawn new bugs, each at a randomised location.
+     */
 	void Spawn() {
 		if (!monster.IsAsleep()) {
 			return;
 		}
 
-		for (int i = 0; i < spawnPoints.Count; i++) {
-			Instantiate (enemy, spawnPoints [i], Quaternion.identity);
-		}			
+        for (int i = 0; i < numToSpawn; i++)
+        {
+            SpawnAt(RandomSpawnPoint());
+        }
+        	
 	}
 
+    //Spawn one enemy at the given point.
+    void SpawnAt(Vector3 point)
+    {
+        Instantiate(enemy, point, Quaternion.identity);
+    }
+
 	public void IncreaseLevel() {
-		Debug.Log ("Adding new spawn point...");
-		AddNewSpawnPoint ();
 		CancelInvoke ("Spawn");
 		InvokeRepeating ("Spawn", 0, updateSpawnTime ());
 	}
 
 	float updateSpawnTime() {
-		spawnTime = spawnTime - (levelManager.getLevel () / 10);
-		if (spawnTime < 1.0f) {
-			AddNewSpawnPoint ();
+        // Make spawning faster, and add new spawn point if spawn times are less than a second apart.
+		spawnTime = spawnTime - (levelManager.getLevel () / 8);
+		if (spawnTime < newPointFreq) {
+            numToSpawn++;
 		}
 
 		Debug.Log ("spawn time: " + spawnTime);
@@ -56,12 +70,11 @@ public class EnemyManager : MonoBehaviour {
 	}
 
 	/**
-	 * Add new random spawn location.
+	 * Return a new spawn location.
 	 */
-	private void AddNewSpawnPoint() {
+	private Vector3 RandomSpawnPoint() {
 		float x = Random.Range (-22.0f, 20.0f);
 		float z = Random.Range (-20.0f, 20.0f);
-		Vector3 spawnPoint = new Vector3 (x, 2, z);
-		spawnPoints.Add (spawnPoint);
+		return new Vector3 (x, 2, z);
 	}
 }

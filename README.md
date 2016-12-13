@@ -17,4 +17,12 @@ Some of the code is taken from/inspired by various books and tutorials:
   - "Unity in Action: Multiplatform Game Develompent in C#" by Joseph Hocking
   - "Creating a Start Menu in Unity 5" by Xenosmash Games (https://www.youtube.com/watch?v=pT4uca2bSgc)
   - The official Unity tutorials
+ 
+ ### Sound credits:
+  - "Pig - Grunt 5 (deep)"" by Jarred Gibb (https://www.freesound.org/people/JarredGibb/sounds/233173/)
+  - "Discomfort 1N56c" by Setuniman (https://www.freesound.org/people/Setuniman/sounds/343466/)
+  - "Awake The Beast" by Kirat (https://www.freesound.org/people/Kirat/sounds/158687/)
+  - "Little pleasures 1N72 (loop)" by Setuniman (https://www.freesound.org/people/Setuniman/sounds/350572/)
+  
+
   
