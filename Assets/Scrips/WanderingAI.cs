@@ -9,13 +9,15 @@ public class WanderingAI : MonoBehaviour, Hittable {
 	private GameObject _fireball;
 	public int damage = 2;
 	public Vector3 monsterPosition;
-	NavMeshAgent nav;
+	UnityEngine.AI.NavMeshAgent nav;
 	private Time lastMonsterHit;
 	private float runAwayTime = 2.0f;
 	private float nextChaseMonster;
 	private Vector3 runDirection;
 	public MonsterBehaviour monsterBehaviour;
 	public int scoreValue = 10;
+
+    AudioSource sound;
 
 	public ScoreManager scoreManager;
 
@@ -31,10 +33,11 @@ public class WanderingAI : MonoBehaviour, Hittable {
 
 	// Use this for initialization
 	void Start () {
+        sound = GetComponent<AudioSource>();
 		_alive = true;
 		health = startingHealth;
 
-		nav = GetComponent<NavMeshAgent> ();
+		nav = GetComponent<UnityEngine.AI.NavMeshAgent> ();
 		monster = GameObject.FindWithTag ("Monster");
 		monsterPosition = monster.transform.position;
 		monsterBehaviour = monster.GetComponent<MonsterBehaviour> ();
@@ -89,6 +92,8 @@ public class WanderingAI : MonoBehaviour, Hittable {
 	public void ReactToHit(int damage) {
 		if (_alive) {
 			health -= damage;
+            sound.Play();
+
 			if (health <= 0) {
 				_alive = false;
 				StartCoroutine (Die ());

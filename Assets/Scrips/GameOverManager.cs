@@ -3,23 +3,26 @@ using System.Collections;
 
 public class GameOverManager : MonoBehaviour {
 
-	public MonsterBehaviour monster;
+    public MonsterBehaviour monster;
+    public SoundManager soundManager;
+    public Replay replay;
+    public AnimationClip clip;
 
-	Animator anim;
+    public bool gameover = false;
 
-	void Awake() {
-		anim = GetComponent<Animator> ();
-	}
+    public Animator anim;
 
 	// Use this for initialization
 	void Start () {
 	
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		if (!monster.IsAsleep ()) {
-			anim.SetTrigger ("GameOver");
-		}
-	}
+
+    public IEnumerator GameOver()
+    {
+        anim.SetTrigger("GameOver");
+        soundManager.GameOverSound();
+        yield return new WaitForSeconds(3.0f);
+        replay.EnableMenu();
+    }
+
 }
