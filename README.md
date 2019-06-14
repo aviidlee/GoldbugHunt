@@ -8,10 +8,6 @@ golden bugs in a cave. Unfortunately, the cave also contains a monster which
 will wake if annoyed by the bugs, or if the player accidentally shoots it.
 I am currently deciding whether the bugs attack the player as well. 
 
-## Play the game
-You can play the current version of the game here:
-http://alex-lee.net/wp-content/uploads/GoldbugHunt/index.html
-
 ## Credits
 Some of the code is taken from/inspired by various books and tutorials:
   - "Unity in Action: Multiplatform Game Develompent in C#" by Joseph Hocking
